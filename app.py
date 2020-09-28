@@ -42,7 +42,11 @@ def allowed_file(filename):
 @app.route('/',  methods=['POST', 'GET'])
 def index():
     if request.method == "POST":
-        if 'file4' not in request.files or 'file8' not in request.files:
+        print(request.files)
+
+
+
+        if ('file4' not in request.files) or ('file8' not in request.files):
             flash('No files Selected.')
             return redirect(request.url)
         file4 = request.files['file4']
@@ -61,11 +65,12 @@ def index():
             except Exception as ex:
                 flash("Internal Error")
                 print(ex)
+                redirect(request.url)
             else:
                 return send_from_directory('static', 'NDVI.tiff', as_attachment=True)
         else:
             flash("Only tiff and jp2 files are allowed.")
-        redirect(url_for('index'))
+            redirect(request.url)
     
     return render_template("base.html")
 
